@@ -62,3 +62,7 @@ The list contains 806 pairs of words that differ by one letter, such as `act` an
 * humanhash2 truncates the digest rather than XOR-folding it, so a longer name extends a shorter one.
 * humanhash2 uses a 2048-word list plus a two-digit number, which gives 39.6 bits for the default 3 words.
 * humanhash2 adds the directory hash tree and the diff.
+
+## License
+
+humanhash2 is released under the MIT License, which is in `LICENSE`. `bip39_english.txt` is copied unchanged from the bitcoin/bips repository.
