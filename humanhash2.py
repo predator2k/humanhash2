@@ -15,8 +15,8 @@ assert len(WORDS) == 2048 and len(set(WORDS)) == 2048
 IGNORED_NAMES = {".git", ".DS_Store", "__pycache__"}
 
 
-def short_name(digest: bytes, n_words: int = 2) -> str:
-    """Map the leading 128 bits of a digest to 'word-word-NN'.
+def short_name(digest: bytes, n_words: int = 3) -> str:
+    """Map the leading 128 bits of a digest to 'word-word-word-NN' (default 3 words).
 
     Mixed-radix split: the last field is 0..99, each word field is 0..2047.
     A longer name extends a shorter one: the words keep their order and the
@@ -69,7 +69,7 @@ def label(node: Node) -> str:
 def print_tree(node: Node, n_words: int, full: bool, depth: int = 0) -> None:
     line = f"{'  ' * depth}{label(node):<{28 - 2 * depth}} {short_name(node.digest, n_words)}"
     if full:
-        line = f"{line:<56} {node.digest.hex()}"
+        line = f"{line:<60} {node.digest.hex()}"  # fits 3 words of up to 8 letters
     print(line)
     for c in node.children:
         print_tree(c, n_words, full, depth + 1)
@@ -97,7 +97,7 @@ def print_diff(a: Node, b: Node, n_words: int, depth: int = 0) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Human-readable SHA-256 names and directory hash trees.")
-    ap.add_argument("-w", "--words", type=int, default=2, help="words per name, 1..10 (default 2)")
+    ap.add_argument("-w", "--words", type=int, default=3, help="words per name, 1..10 (default 3)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("name", help="print the name of each file")
     p.add_argument("files", nargs="+", type=Path)
